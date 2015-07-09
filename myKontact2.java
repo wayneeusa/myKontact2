@@ -4,6 +4,7 @@ import com.opencsv.CSVReader;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.ref.PhantomReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -373,8 +374,8 @@ public class myKontact2 extends Object {
             // Print List
             case 5:
                 for (Person p : list) {
-                    System.out.println(p.getFirstName() + " " + p.getLastName() +
-                            " " + p.getEmail() + " " + p.getPhone() + " " + p.getNotes());
+                    System.out.println(p.getFirstName() + "  " + p.getLastName() +
+                            "\t " + p.getEmail() + " \t" + p.getPhone() + "\t " + p.getNotes());
 
                 }
                 System.out.println();
@@ -490,9 +491,8 @@ public class myKontact2 extends Object {
             System.out.println();
 
             if (searchResults != null) {
-                System.out.println(c.getFirstName() + " " +
-                        c.getLastName() + " " + c.getEmail() + " " +
-                        c.getPhone() + " " + c.getNotes());
+                System.out.println(c.getFirstName() + "  " + c.getLastName() +
+                        "     " + c.getEmail() + "\n" + c.getPhone() + "\n" + c.getNotes() + "\n\n");
             }
         }
         addressToEmail = "";
@@ -531,8 +531,16 @@ public class myKontact2 extends Object {
                 String firstName = list.get(i).getFirstName().toUpperCase().trim();
                 String secondName = list.get(i).getLastName().toUpperCase().trim();
 
+                String email = list.get(i).getEmail().trim();
+                String phone = list.get(i).getPhone().trim();
+                String notes = list.get(i).getNotes().trim();
+
                 list.get(i).setFirstName(firstName);
                 list.get(i).setLastName(secondName);
+
+                list.get(i).setEmail(email);
+                list.get(i).setPhone(phone);
+                list.get(i).setNotes(notes);
 
             }
 
@@ -820,7 +828,9 @@ public class myKontact2 extends Object {
                     + "2) Save to absolute path \n"
                     + "3) Import from Yandex with different filename\n"
                     + "4) Import from different filename \n"
-                    + "5) Previous Menu");
+                    + "5) Previous Menu \n"
+                    + "6) Initial Menu \n"
+                    + "7) Open Yandex list in Sublime");
 
             if (input.hasNextInt()) {
                 choice = input.nextInt();
@@ -831,7 +841,8 @@ public class myKontact2 extends Object {
                 System.out.println("Enter again");
             }
             ;
-        } while (choice != 1 && choice != 2 && choice != 3 && choice != 4);
+        } while (choice != 1 && choice != 2 && choice != 3 && choice != 4
+                && choice != 5 && choice != 6 && choice != 7);
 
         switch (choice) {
 
@@ -851,11 +862,29 @@ public class myKontact2 extends Object {
                 System.out.println();
                 menu2();
                 break;
+            case 6:
+                printMenu();  //Menu 1
+                runSwitch();
+                break;
+            case 7:
+                openInSublime();
+                break;
 
         }
 
         menu2();
 
+
+    }
+
+    static void openInSublime(){
+
+        try {
+            Runtime.getRuntime().exec("subl /Users/wayne/Yandex.Disk.localized/" +
+                    "Documents/Kontacts.txt");
+        }catch(Exception ex) {
+            System.out.println("Couldn't open file");
+        }
 
     }
 
