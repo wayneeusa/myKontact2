@@ -65,6 +65,7 @@ public class myKontact2 {
             if (operatingSystem.contains("Windows")) {
                 Runtime.getRuntime().exec("cls");
             } else {
+
                 Runtime.getRuntime().exec("clear");
             }
         } catch (IOException ex) {
@@ -79,7 +80,8 @@ public class myKontact2 {
                     + "2) Import from Yandex \n"
                     + "3) Import from DataBase \n"
                     + "4) Begin a new file \n"
-                    + "5) Quit");
+                    + "5) Quit \n"
+                    );
 
             if (input.hasNextInt()) {
 
@@ -97,7 +99,7 @@ public class myKontact2 {
         }
 
         while (choice != 1 && choice != 2 && choice != 3 && choice
-                != 4 && choice != 5);
+                != 4 && choice != 5 );
 
         System.out.println("Choice was: " + choice);
 
@@ -123,6 +125,9 @@ public class myKontact2 {
                 System.out.println("See you later!");
                 System.exit(0);
                 break;
+            case 6:
+                clearConsole();
+                break;
 
         }
 
@@ -138,7 +143,8 @@ public class myKontact2 {
             //Buffer Reader example:
             // http://www.java2s.com/Code/Java/File-Input-Output/Readeachlineinacommaseparatedfileintoanarray.htm
 
-            BufferedReader reader = new BufferedReader(new FileReader("/home/wayne/Documents/snippets/Kontacts.txt"));
+            //Folder is OS specific. Below path is for main MacBook Air on OSX
+            BufferedReader reader = new BufferedReader(new FileReader("/Users/wayne/Documents/snippets/Kontacts.txt"));
 
             String line = null;
 
@@ -197,7 +203,7 @@ public class myKontact2 {
 		} catch (IOException exc) {System.out.println("IO exception");
 		};*/
 
-
+        System.out.println();
         menu2();
 
     }
@@ -215,7 +221,7 @@ public class myKontact2 {
         try {
             //CSVReader reader = null;
             CSVReader reader = new CSVReader(new FileReader(
-                    "/home/wayne/Yandex.Disk/Documents/Kontacts.txt"));
+                    "/Users/wayne/Yandex.Disk.localized/Documents/Kontacts.txt"));
 
             //ParseCSVFile parseCSVFile = new ParseCSVFile();
 
@@ -255,7 +261,7 @@ public class myKontact2 {
             System.out.println("IO exception");
         }
         ;
-
+        System.out.println();
         menu2();
 
     }
@@ -295,6 +301,7 @@ public class myKontact2 {
 
         list.add(new Person(first, last, email, phone, notes));
 
+        System.out.println();
         menu2();
 
     }
@@ -302,6 +309,7 @@ public class myKontact2 {
     static void menu2() {
 
         do {
+            System.out.println();
 
             System.out.println("What would you like to do?");
             System.out.println("1) Save List to Evernote \n"
@@ -394,8 +402,8 @@ public class myKontact2 {
 
         try {
 
-            PrintWriter pw = new PrintWriter(new File("/home/wayne/"
-                    + "Documents/snippets/Kontacts.txt"));
+            PrintWriter pw = new PrintWriter(new File("/Users/wayne/" +
+                    "Documents/snippets/Kontacts.txt"));
 
             pw.printf(longString);
 
@@ -423,8 +431,8 @@ public class myKontact2 {
 
         try {
 
-            PrintWriter pw = new PrintWriter(new File("/home/wayne/"
-                    + "Yandex.Disk/Documents/Kontacts.txt"));
+            PrintWriter pw = new PrintWriter(new File("/Users/wayne/"
+                    + "Yandex.Disk.localized/Documents/Kontacts.txt"));
 
             pw.printf(longString);
 
@@ -619,7 +627,8 @@ public class myKontact2 {
                 removeContact();
                 menu2();
                 break;
-            case 2:     //Firgure out how to edit the contact
+            case 2:
+                 editFirstResult();  //Firgure out how to edit the contact
                 menu2();
                 break;
             case 3:
@@ -638,6 +647,70 @@ public class myKontact2 {
                 break;
         }
 
+    }
+
+    static void editFirstResult() {
+
+        if (searchResults.size() > 0) {
+
+            String first = searchResults.get(0).getFirstName();
+            String last = searchResults.get(0).getLastName();
+
+            for (int i = 0; i < list.size(); i++) {
+
+                if (list.get(i).getFirstName() == first
+                        && list.get(i).getLastName() == last) {
+
+                    String email = list.get(i).getEmail();
+                    String phone = list.get(i).getPhone();
+                    String notes = list.get(i).getNotes();
+
+                    System.out.println("First name is "+first+"\n"
+                    +"Enter correction or ENTER");
+                    String temp = input.next();
+                    if(!(temp.equals (""))){
+                        list.get(i).setFirstName(temp);
+                    }
+
+                    System.out.println("Last name is "+last+"\n"
+                            +"Enter correction or ENTER");
+                     temp = input.next();
+                    if(!(temp.equals(""))){
+
+                        list.get(i).setLastName(temp);
+                    }
+
+                    System.out.println("Email is "+email+"\n"
+                            +"Enter correction or ENTER");
+
+                    temp = input.next();
+
+                    if(!(temp.equals(""))){
+                        list.get(i).setEmail(temp);
+                    }
+
+                    System.out.println("Notes say "+notes+"\n"
+                            +"Enter correction or ENTER");
+                    temp = input.next();
+                    if(!(temp.equals(""))){
+                        list.get(i).setNotes(temp);
+                    }
+
+                    System.out.println("Entry is corrected to: \n" +
+                            list.get(i).getFirstName()+" " +
+                            list.get(i).getLastName()+" \n" +
+                            list.get(i).getEmail()+" " +
+                            list.get(i).getPhone()+" \n" +
+                            list.get(i).getNotes());
+
+                } 
+
+
+            }
+
+        }
+
+            menu2();
     }
 
     static void emailContact(String address) {
@@ -698,7 +771,8 @@ public class myKontact2 {
                     + "1) Save to Yandex with different filename \n"
                     + "2) Save to absolute path \n"
                     + "3) Import from Yandex with different filename\n"
-                    + "4) Import from different filename \n");
+                    + "4) Import from different filename \n"
+                    + "5) Previous Menu");
 
             if (input.hasNextInt()) {
                 choice = input.nextInt();
@@ -725,6 +799,10 @@ public class myKontact2 {
             case 4:
                 importFromAnywhere("anywhere");
                 break;
+            case 5:
+                System.out.println();
+                menu2();
+                break;
 
         }
 
@@ -742,7 +820,7 @@ public class myKontact2 {
                     "(Without extension)");
             fileName = input.next();
             input.nextLine();
-            path = "/home/wayne/Yandex.Disk/Documents/";
+            path = "/Users/wayne/Yandex.Disk.localized/Documents/";
         } else if (where == "anywhere") {
 
             System.out.println("Enter absolute path: \n" +
@@ -785,7 +863,7 @@ public class myKontact2 {
 
         if (where == "Yandex") {
 
-            path = "/home/wayne/Yandex.Disk/Documents/";
+            path = "/Users/wayne/Yandex.Disk.localized/Documents/";
 
             System.out.println("Enter filename without extension:");
             fileName = input.next();
