@@ -9,11 +9,14 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import java.lang.Object;
+import java.awt.Desktop;
+
 
 //import java.util.List;
 //for Open CSV
 
-public class myKontact2 {
+public class myKontact2 extends Object {
 
     public static final Scanner input = new Scanner(System.in);
     static int choice = 0;
@@ -29,6 +32,7 @@ public class myKontact2 {
     static String notes = "";
     static String fileName = "";
     static String path = "";
+    static Desktop desktop;
     // TODO add more variables
 
 
@@ -46,6 +50,21 @@ public class myKontact2 {
         // window.setLocation(width, height);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setVisible(true);*/
+
+        // See if I can enable email funtions
+
+        if (Desktop.isDesktopSupported()) {
+            desktop = Desktop.getDesktop();
+            //txtMailTo.setEnabled(false);
+        }
+
+
+
+        if (desktop.isSupported(Desktop.Action.MAIL)) {
+
+            //System.out.println("mail is enabled");
+
+        }
 
 
         printMenu();  //Menu 1
@@ -628,12 +647,14 @@ public class myKontact2 {
                 menu2();
                 break;
             case 2:
-                 editFirstResult();  //Firgure out how to edit the contact
+                 editFirstResult();  //Figured out how to edit contact
                 menu2();
                 break;
             case 3:
+                //TODO  email functionality
+                sendEmail();
 
-                emailContact(addressToEmail);//Figure out how to email the contact
+               // emailContact(addressToEmail);//Figure out how to email the contact
                 break;
             case 4:
                 searchContacts();
@@ -648,6 +669,33 @@ public class myKontact2 {
         }
 
     }
+
+    static void sendEmail(){
+
+
+           String mailTo = addressToEmail;
+            URI uriMailTo = null;
+            try {
+                if (mailTo.length() > 0) {
+                    uriMailTo = new URI("mailto", mailTo, null);
+                    desktop.mail(uriMailTo);
+                } else {
+                    desktop.mail();
+                }
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
+            } catch(URISyntaxException use) {
+                use.printStackTrace();
+            }
+        menu2();
+        }
+
+
+
+
+
+
+
 
     static void editFirstResult() {
 
@@ -703,7 +751,7 @@ public class myKontact2 {
                             list.get(i).getPhone()+" \n" +
                             list.get(i).getNotes());
 
-                } 
+                }
 
 
             }
